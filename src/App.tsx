@@ -14,7 +14,9 @@ import {
   ExternalLink,
   Globe,
   Plus,
-  X
+  X,
+  Lock,
+  BookOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -25,6 +27,10 @@ interface Tab {
 }
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [error, setError] = useState(false);
+
   const [tabs, setTabs] = useState<Tab[]>([
     { id: '1', url: 'https://www.wikipedia.org', title: 'Wikipedia' }
   ]);
@@ -90,6 +96,74 @@ export default function App() {
       iframeRef.current.src = currentUrl;
     }
   };
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passwordInput === 'meaburro12') {
+      setIsAuthenticated(true);
+      setError(false);
+    } else {
+      setError(true);
+      setPasswordInput('');
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-[#F5F5F5] font-sans p-6">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 border border-black/5"
+        >
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-4">
+              <BookOpen size={32} />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 text-center">Cambridge English</h1>
+            <p className="text-gray-500 text-center mt-2">Introduce tu contraseña para acceder al libro de inglés Cambridge</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-400">
+                <Lock size={18} />
+              </div>
+              <input
+                type="password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                placeholder="Contraseña"
+                className={`w-full bg-gray-50 border ${error ? 'border-red-500' : 'border-gray-200'} rounded-2xl py-4 pl-12 pr-4 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all`}
+                autoFocus
+              />
+            </div>
+            
+            {error && (
+              <motion.p 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-red-500 text-xs font-medium text-center"
+              >
+                Contraseña incorrecta. Inténtalo de nuevo.
+              </motion.p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full bg-black text-white rounded-2xl py-4 font-semibold hover:bg-gray-800 active:scale-[0.98] transition-all shadow-lg shadow-black/10"
+            >
+              Acceder
+            </button>
+          </form>
+
+          <div className="mt-8 pt-6 border-t border-gray-100 flex justify-center">
+            <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Secure Access System</p>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-screen bg-[#F5F5F5] font-sans overflow-hidden">
