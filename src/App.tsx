@@ -30,6 +30,7 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [error, setError] = useState(false);
+  const [noBooks, setNoBooks] = useState(false);
 
   const [tabs, setTabs] = useState<Tab[]>([
     { id: '1', url: 'https://www.wikipedia.org', title: 'Wikipedia' }
@@ -102,8 +103,14 @@ export default function App() {
     if (passwordInput === 'meaburro12') {
       setIsAuthenticated(true);
       setError(false);
+      setNoBooks(false);
+    } else if (passwordInput === 'ingles2026') {
+      setNoBooks(true);
+      setError(false);
+      setPasswordInput('');
     } else {
       setError(true);
+      setNoBooks(false);
       setPasswordInput('');
     }
   };
@@ -147,6 +154,18 @@ export default function App() {
               >
                 Contraseña incorrecta. Inténtalo de nuevo.
               </motion.p>
+            )}
+
+            {noBooks && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-amber-50 border border-amber-200 rounded-xl p-4"
+              >
+                <p className="text-amber-800 text-xs font-medium text-center">
+                  No hay libros disponibles actualmente para este acceso.
+                </p>
+              </motion.div>
             )}
 
             <button
