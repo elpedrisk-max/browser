@@ -1,0 +1,5 @@
+{
+  "name": "OmniBrowse",
+  "description": "A minimalist in-app browser interface with search and navigation capabilities.",
+  "requestFramePermissions": []
+}
